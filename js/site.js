@@ -31,5 +31,45 @@ async function getPopularMovies() {
     
 }
 
+async function displayPopularMovies(){
+    let movies = await getPopularMovies
+    displayMovies(movies);
+}
 
+function displayMovies(movies){
+    // Get movie Card Template from HTML
+    const movieCardTemplate = document.getElementById('movie-card-template');
 
+    //find the element where the movie card WILL go 
+    const movieRow = document.getElementById('movie-row');
+
+    // resets the html section of the movies
+    movieRow.innerHTML = '';
+
+    // we need a card for each movie in the movie array
+    for (const movie of movies){
+
+        // Copy of the template between the opening and closing tag
+        let movieCard = movieCardTemplate.content.cloneNode(true);
+
+        // modify the template with the current movie
+        let titleElement = movieCard.querySelector('.card-body > h5');
+        titleElement.textContent = movie.title;
+
+        let descriptionElement = movieCard.querySelector('.card-text');
+        descriptionElement.textContent = movie.overview;
+
+        let movieImgElement = movieCard.querySelector('card-img-top');
+        movieImgElement.setAttribute('src', `https://image.tmdb.org/t/p/w500${movie.poster_path}`);
+
+        let infoButton = movieCard.querySelector('.btn-primary');
+        infoButton.setAttribute('data-movieId', movie.id);
+
+        let favoriteButton = movieCard.querySelector('.btn-outline-primary');
+        favoriteButton.setAttribute('data-movieId' , movie.id);
+
+        // add it to the page
+        movieRow.appendChild(movieCard);
+
+    }
+}
