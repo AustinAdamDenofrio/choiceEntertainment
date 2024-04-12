@@ -1,7 +1,6 @@
 const API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjNjFkZTcwZjE2Y2ZmYjFmNDBhNDgzYTJhZDI5NTgwMCIsInN1YiI6IjY2MTk4MDYwMTIxOTdlMDE2NGJiYjU1NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.n0SrW4YbNjv9FK3kd14-xiKD_qoNqirRWsPKXDEQoMg'
 
 //Return a list of an array of movies objects or empty array.
-
 async function getPopularMovies() {
 
     try{
@@ -18,7 +17,7 @@ async function getPopularMovies() {
         });
 
         if(response.ok){
-            let data = response.json();
+            let data = await response.json();
             return data.results;
         }else{
             return [];
@@ -32,7 +31,7 @@ async function getPopularMovies() {
 }
 
 async function displayPopularMovies(){
-    let movies = await getPopularMovies
+    let movies = await getPopularMovies();
     displayMovies(movies);
 }
 
@@ -59,7 +58,7 @@ function displayMovies(movies){
         let descriptionElement = movieCard.querySelector('.card-text');
         descriptionElement.textContent = movie.overview;
 
-        let movieImgElement = movieCard.querySelector('card-img-top');
+        let movieImgElement = movieCard.querySelector('.card-img-top');
         movieImgElement.setAttribute('src', `https://image.tmdb.org/t/p/w500${movie.poster_path}`);
 
         let infoButton = movieCard.querySelector('.btn-primary');
@@ -73,3 +72,26 @@ function displayMovies(movies){
 
     }
 }
+
+
+// Movie Details
+// Step1: When the user clicks the more info button show the modal
+// Step2: Call API. Make sure the data is coming back aka in the network tab
+// Step 3 modify the modal.
+async function showMovieDetails(button){
+
+    let movieId = button.getAttribute('data-movieId');
+    let movie = await getMovieDetail(movieId);
+}
+
+// cal the tmdb to get the movie detail
+async function getMovieDetail(movieId){
+    
+    const movieDetailUrl = `https://api.themoviedb.org/3/movie/popular${movieId}`;
+
+    alert(`the movie id is ${movieId}`)
+
+    // return a movie object.
+}
+
+// Display Modal wit info.
