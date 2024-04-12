@@ -56,10 +56,8 @@
 
 
     <main class="container-xxl py-3 mt-3">
-        <h1>APP UI goes here</h1>
-        <label>Secret Message</label>
-        <input id="message" type="text" value="Hello, World!" placeholder="Enter a Message" />
-        <button id="btnSubmit" class="btn btn-primary">Display Message</button>
+        <h1>Movie list Alpha v.1 </h1>
+        <button id="btnSubmit" class="btn btn-primary">Get Popular movies</button>
     </main>
 
 
@@ -101,7 +99,7 @@
 
     <script>
         let button = document.getElementById('btnSubmit');
-        button.addEventListener('click', displayMessage);
+        button.addEventListener('click', getPopularMovies);
     </script>
 </body>
 
