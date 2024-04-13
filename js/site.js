@@ -66,13 +66,26 @@ function displayMovies(movies){
         infoButton.setAttribute('data-movieId', movie.id);
 
         let favoriteButton = movieCard.querySelector('.btn-outline-primary');
-        favoriteButton.setAttribute('data-movieId' , movie.id);
+        favoriteButton.setAttribute('data-movieId', movie.id);
 
         // add it to the page
         movieRow.appendChild(movieCard);
 
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Movie Details
@@ -83,18 +96,70 @@ async function showMovieDetails(button){
 
     let movieId = button.getAttribute('data-movieId');
     let movie = await getMovieDetail(movieId);
+    displayMovieDetails(movie)
 }
 
-// cal the tmdb to get the movie detail
+// call the tmdb to get the movie detail as an object
 async function getMovieDetail(movieId){
     
-    const movieDetailUrl = `https://api.themoviedb.org/3/movie/popular${movieId}`;
+    try{
+        const movieDetailUrl = `https://api.themoviedb.org/3/movie/popular${movieId}`;
 
-    alert(`the movie id is ${movieId}`)
+        alert(`the movie id is ${movieId}`)
 
-    // return a movie object.
 
+        let response = await fetch(movieDetailUrl, {
+            headers: {
+                'Authorization': `Bearer ${API_KEY}`
+            }
+        });
     
+    
+        // return a movie object.
+        if(response.ok){
+            let data = await response.json();
+            return data.results;
+        }else{
+            return [];
+        }
+
+        // try error catch
+    } catch(error){
+        console.log(error)
+        return [];
+    }
 }
 
 // Display Modal with info.
+function displayMovieDetails(movie){
+    
+    // Bootstrap handles the displaying of the modal, we do not need to handle, but the content
+    // needs to be dynamically changed.
+
+    // Store the modal in a variable to be changed later.
+    let movieModal = document.getElementById('projectOneModal');
+    // Store all the content inside a variable
+    let movieModalContent = movieModal.content.cloneNode(true);
+
+
+    // Modify the Modal:
+
+    let titleElement = movieModalContent.querySelector('.modal-title-name');
+    titleElement.textContent = movie.title;
+
+    // let descriptionElement = movieCard.querySelector('.card-text');
+    // descriptionElement.textContent = movie.overview;
+
+    // let movieImgElement = movieCard.querySelector('.card-img-top');
+    // movieImgElement.setAttribute('src', `https://image.tmdb.org/t/p/w500${movie.poster_path}`);
+
+    // let infoButton = movieCard.querySelector('.btn-primary');
+    // infoButton.setAttribute('data-movieId', movie.id);
+
+    // let favoriteButton = movieCard.querySelector('.btn-outline-primary');
+    // favoriteButton.setAttribute('data-movieId', movie.id);
+
+
+
+
+}
