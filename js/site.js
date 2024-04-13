@@ -96,38 +96,43 @@ async function showMovieDetails(button){
 
     let movieId = button.getAttribute('data-movieId');
     let movie = await getMovieDetail(movieId);
-    displayMovieDetails(movie)
+    displayMovieDetails(movie);
 }
 
 // call the tmdb to get the movie detail as an object
 async function getMovieDetail(movieId){
     
+
+    const movieDetailUrl = `https://api.themoviedb.org/3/movie/popular`;
+
+    let moviesObjectArray;
+
+    alert(`the movie id is ${movieId}`)
+
     try{
-        const movieDetailUrl = `https://api.themoviedb.org/3/movie/popular${movieId}`;
-
-        alert(`the movie id is ${movieId}`)
-
-
+        // call the API
+        //Store whatever the response is, but need a var.
+        // var response holds the json response from the fetch.
         let response = await fetch(movieDetailUrl, {
             headers: {
                 'Authorization': `Bearer ${API_KEY}`
             }
         });
-    
-    
-        // return a movie object.
+
         if(response.ok){
             let data = await response.json();
-            return data.results;
+            moviesObjectArray = data.results;
         }else{
             return [];
         }
 
-        // try error catch
     } catch(error){
         console.log(error)
         return [];
     }
+
+    const movieObject = moviesObjectArray.
+
 }
 
 // Display Modal with info.
