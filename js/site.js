@@ -6,6 +6,7 @@ async function getPopularMovies() {
     try{
         // Step 1: get URL
         const getPopularMoviesUrl = 'https://api.themoviedb.org/3/movie/popular';
+
         // Step2: call the API
 
         //Store whatever the response is, but need a var.
@@ -92,6 +93,8 @@ async function getMovieDetail(movieId){
     alert(`the movie id is ${movieId}`)
 
     // return a movie object.
+
+    
 }
 
-// Display Modal wit info.
+// Display Modal with info.
