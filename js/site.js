@@ -136,23 +136,36 @@ function displayMovieDetails(movie){
     
     const projectOneModal = document.getElementById('projectOneModal');
 
-
-
-
-    let titleElement = projectOneModal.querySelector('.modal-title-name');
+    // Add title and header
+    let titleElement = projectOneModal.querySelector('h1');
+    titleElement.textContent = movie.title;
+    titleElement = projectOneModal.querySelector('h3');
     titleElement.textContent = movie.title;
 
-    // let descriptionElement = movieCard.querySelector('.card-text');
-    // descriptionElement.textContent = movie.overview;
+    // Add image
+    let movieImgElement = projectOneModal.querySelector('#moviePoster');
+    movieImgElement.setAttribute('src', `https://image.tmdb.org/t/p/w500${movie.poster_path}`);
 
-    // let movieImgElement = movieCard.querySelector('.card-img-top');
-    // movieImgElement.setAttribute('src', `https://image.tmdb.org/t/p/w500${movie.poster_path}`);
+    // Add Synopsis section
+    let descriptionElement = projectOneModal.querySelector('#synopsisMovieSection > p');
+    descriptionElement.textContent = movie.overview;
 
-    // let infoButton = movieCard.querySelector('.btn-primary');
-    // infoButton.setAttribute('data-movieId', movie.id);
+    // Production details
+        // Ratings
+    let ratingsElement = projectOneModal.querySelector('#detailedMovieSection div:nth-child(1) p');
+    ratingsElement.textContent = movie.vote_average;
+        // Release Date
+    let releaseDateElement = projectOneModal.querySelector('#detailedMovieSection div:nth-child(2) p');
+    releaseDateSymbolElement = releaseDateElement;
+    releaseDateElement.textContent = `${movie.release_date}`;
+        // Budget
+    let budgetElement = projectOneModal.querySelector('#detailedMovieSection div:nth-child(3) p');
+    budgetElement.textContent = movie.budget;
+        // Runtime 
+    let runtimeElement = projectOneModal.querySelector('#detailedMovieSection div:nth-child(4) p');
+    runtimeElement.textContent = movie.runtime;
 
-    // let favoriteButton = movieCard.querySelector('.btn-outline-primary');
-    // favoriteButton.setAttribute('data-movieId', movie.id);
+
 
 
 }
