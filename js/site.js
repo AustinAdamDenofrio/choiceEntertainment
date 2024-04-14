@@ -1,5 +1,9 @@
+
+
+
 const API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjNjFkZTcwZjE2Y2ZmYjFmNDBhNDgzYTJhZDI5NTgwMCIsInN1YiI6IjY2MTk4MDYwMTIxOTdlMDE2NGJiYjU1NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.n0SrW4YbNjv9FK3kd14-xiKD_qoNqirRWsPKXDEQoMg'
 
+//                                                      **************** Get a list of movies to populate page  *******************
 //Return a list of an array of movies objects or empty array.
 async function getPopularMovies() {
 
@@ -77,17 +81,7 @@ function displayMovies(movies){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+//                                           **************** Make dynamic MODAL that will display individual movie details  *******************
 // Movie Details
 // Step1: When the user clicks the more info button show the modal
 // Step2: Call API. Make sure the data is coming back aka in the network tab
@@ -103,11 +97,11 @@ async function showMovieDetails(button){
 async function getMovieDetail(movieId){
     
 
-    const movieDetailUrl = `https://api.themoviedb.org/3/movie/popular`;
+    const movieDetailUrl = `https://api.themoviedb.org/3/movie/${movieId}`;
 
-    let moviesObjectArray;
+    // let moviesObjectArray;
 
-    alert(`the movie id is ${movieId}`)
+    // alert(`the movie id is ${movieId}`)
 
     try{
         // call the API
@@ -121,7 +115,9 @@ async function getMovieDetail(movieId){
 
         if(response.ok){
             let data = await response.json();
-            moviesObjectArray = data.results;
+            // moviesObjectArray = data.results;
+            results = data;
+            return results;
         }else{
             return [];
         }
@@ -131,25 +127,19 @@ async function getMovieDetail(movieId){
         return [];
     }
 
-    const movieObject = moviesObjectArray.
-
+    // const movieObject = moviesObjectArray.
 }
+
 
 // Display Modal with info.
 function displayMovieDetails(movie){
     
-    // Bootstrap handles the displaying of the modal, we do not need to handle, but the content
-    // needs to be dynamically changed.
-
-    // Store the modal in a variable to be changed later.
-    let movieModal = document.getElementById('projectOneModal');
-    // Store all the content inside a variable
-    let movieModalContent = movieModal.content.cloneNode(true);
+    const projectOneModal = document.getElementById('projectOneModal');
 
 
-    // Modify the Modal:
 
-    let titleElement = movieModalContent.querySelector('.modal-title-name');
+
+    let titleElement = projectOneModal.querySelector('.modal-title-name');
     titleElement.textContent = movie.title;
 
     // let descriptionElement = movieCard.querySelector('.card-text');
@@ -163,8 +153,6 @@ function displayMovieDetails(movie){
 
     // let favoriteButton = movieCard.querySelector('.btn-outline-primary');
     // favoriteButton.setAttribute('data-movieId', movie.id);
-
-
 
 
 }
