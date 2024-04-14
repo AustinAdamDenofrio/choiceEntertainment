@@ -146,24 +146,38 @@ function displayMovieDetails(movie){
     let movieImgElement = projectOneModal.querySelector('#moviePoster');
     movieImgElement.setAttribute('src', `https://image.tmdb.org/t/p/w500${movie.poster_path}`);
 
+    // Add Subheader
+    subtitleElement = projectOneModal.querySelector('#titleMovieSection > p');
+    subtitleElement.textContent = movie.tagline;
+
     // Add Synopsis section
     let descriptionElement = projectOneModal.querySelector('#synopsisMovieSection > p');
     descriptionElement.textContent = movie.overview;
 
-    // Production details
-        // Ratings
+          // Production details
+    // Ratings
     let ratingsElement = projectOneModal.querySelector('#detailedMovieSection div:nth-child(1) p');
-    ratingsElement.textContent = movie.vote_average;
-        // Release Date
+    ratingsElement.innerHTML = `${movie.vote_average.toFixed(1)} \&#x2605;\ `;
+    // Release Date
     let releaseDateElement = projectOneModal.querySelector('#detailedMovieSection div:nth-child(2) p');
     releaseDateSymbolElement = releaseDateElement;
-    releaseDateElement.textContent = `${movie.release_date}`;
-        // Budget
+    releaseDateElement.innerHTML = `${movie.release_date} <i class="bi bi-calendar"></i>`;
+     // Budget
     let budgetElement = projectOneModal.querySelector('#detailedMovieSection div:nth-child(3) p');
-    budgetElement.textContent = movie.budget;
-        // Runtime 
+    // console.log(
+    //     new Intl.NumberFormat("en-IN", { maximumSignificantDigits: 3 }).format(
+    //       movie.budget,
+    //     ),
+    //   );
+    let formatedBudget = new Intl.NumberFormat( {style: "currency", currency: 'USD', maximumSignificantDigits: 4 }).format(movie.budget,);
+    budgetElement.innerHTML = `$${formatedBudget} <i class="bi bi-database-up"></i>`;
+    // Runtime 
+        // *Note: Need to split the API property:value into minutes and hours then generating the html and populating with data
     let runtimeElement = projectOneModal.querySelector('#detailedMovieSection div:nth-child(4) p');
-    runtimeElement.textContent = movie.runtime;
+    let totalInMinutes = movie.runtime;
+    let parsedHours = Math.floor(totalInMinutes / 60);
+    let parsedMinutes = totalInMinutes % 60;
+    runtimeElement.innerHTML = `<span class="small">${parsedHours} Hours</span><span class="small"> ${parsedMinutes} Minutes</span> <i class="bi bi-clock"></i>`;
 
 
 
