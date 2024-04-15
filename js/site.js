@@ -40,6 +40,11 @@ async function displayPopularMovies(){
     displayMovies(movies);
 }
 
+function displayFavoriteMovies(){
+    let favorite = getFavoriteMovies();
+    displayMovies(favorite);
+}
+
 function displayMovies(movies){
     // Get movie Card Template from HTML
     const movieCardTemplate = document.getElementById('movie-card-template');
@@ -74,8 +79,26 @@ function displayMovies(movies){
 
         // add it to the page
         movieRow.appendChild(movieCard);
-
+        
     }
+}
+
+function removeFavorite(button){
+    // get our array of favorite movies
+    let favorites = getFavoriteMovies();
+    // search for a movie with data-movieId that is on this button
+    // remove movie from array
+    const movieId = button.getAttribute('data-movieId');
+    // filter says return whatever is according to the (parameter)
+    let newFavorites = favorites.filter(movie => movie.id != movieId);
+    // save back to array
+    saveFavoriteMovies(newFavorites);
+    // Update on the page
+    displayFavoriteMovies();
+
+
+    // refresh page
+
 }
 // #endregion                                                     ****************  Get a list of movies to populate page  *******************
 
@@ -86,19 +109,10 @@ function displayMovies(movies){
 // Step1: When the user clicks the more info button show the modal
 // Step2: Call API. Make sure the data is coming back aka in the network tab
 // Step 3 modify the modal.
-async function showMovieDetails(button){
-
-    let movieId = button.getAttribute('data-movieId');
-    let movie = await getMovieDetail(movieId);
-    displayMovieDetails(movie);
-}
-
-// call the tmdb to get the movie detail as an object
 async function getMovieDetail(movieId){
     
-
+    // API URL for specific movie ID
     const movieDetailUrl = `https://api.themoviedb.org/3/movie/${movieId}`;
-
 
     try{
         // call the API
@@ -111,84 +125,110 @@ async function getMovieDetail(movieId){
         });
 
         if(response.ok){
-            let data = await response.json();
-            // moviesObjectArray = data.results;
-            results = data;
+            let movie = await response.json();
+            results = movie;
             return results;
         }else{
-            return [];
+            return undefined;
         }
 
     } catch(error){
         console.log(error)
-        return [];
+        return undefined;
     }
 
     // const movieObject = moviesObjectArray.
 }
 
+async function showMovieDetails(button){
 
-// Display Modal with info.
-function displayMovieDetails(movie){
-    
-    const projectOneModal = document.getElementById('projectOneModal');
+    let movieId = button.getAttribute('data-movieId');
+    let movie = await getMovieDetail(movieId);
 
-    // Add title and header
-    let titleElement = projectOneModal.querySelector('h1');
-    titleElement.textContent = movie.title;
-    titleElement = projectOneModal.querySelector('h3');
-    titleElement.textContent = movie.title;
-
-    // Add image
-    let movieImgElement = projectOneModal.querySelector('#moviePoster');
-    movieImgElement.setAttribute('src', `https://image.tmdb.org/t/p/w500${movie.poster_path}`);
-
-    // Add Subheader
-    let subtitleElement = projectOneModal.querySelector('#titleMovieSection > p');
-    subtitleElement.textContent = movie.tagline;
-
-    // Add Synopsis section
-    let descriptionElement = projectOneModal.querySelector('#synopsisMovieSection > p');
-    descriptionElement.textContent = movie.overview;
-
-          // Production details
-    // Ratings
-    let ratingsElement = projectOneModal.querySelector('#detailedMovieSection div:nth-child(1) p');
-    ratingsElement.innerHTML = `${movie.vote_average.toFixed(1)} \&#x2605;\ `;
-    // Release Date
-    let releaseDateElement = projectOneModal.querySelector('#detailedMovieSection div:nth-child(2) p');
-    releaseDateSymbolElement = releaseDateElement;
-    releaseDateElement.innerHTML = `${movie.release_date} <i class="bi bi-calendar"></i>`;
-     // Budget
-    let budgetElement = projectOneModal.querySelector('#detailedMovieSection div:nth-child(3) p');
-    let formatedBudget = new Intl.NumberFormat( {style: "currency", currency: 'USD', maximumSignificantDigits: 4 }).format(movie.budget,);
-    budgetElement.innerHTML = `$${formatedBudget} <i class="bi bi-database-up"></i>`;
-    // Runtime 
-        // *Note: Need to split the API property:value into minutes and hours then generating the html and populating with data
-    let runtimeElement = projectOneModal.querySelector('#detailedMovieSection div:nth-child(4) p');
-    let totalInMinutes = movie.runtime;
-    let parsedHours = Math.floor(totalInMinutes / 60);
-    let parsedMinutes = totalInMinutes % 60;
-    runtimeElement.innerHTML = `<span class="small">${parsedHours} Hours</span><span class="small"> ${parsedMinutes} Minutes</span> <i class="bi bi-clock"></i>`;
+    if (movie != undefined){
+        document.getElementById('modal-title').textContent = movie.title;
+        document.getElementById('modal-title-name').textContent = movie.title;
+        document.getElementById('modal-tagline').textContent = movie.tagline;
+        document.getElementById('modal-synopsis').textContent = movie.overview;
+        document.getElementById('movie-img').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
 
 
-    // Production Companies
+        let movieGenres = document.getElementById('movieGenre');
+        movieGenres.innerHTML = '';
+        // <span class="badge text-bg-primary">Action</span>
+        // <span class="badge text-bg-primary">Adventure</span>
+        // <span class="badge text-bg-primary">Science Fiction</span>
 
-    // Path to the object that holds the array of objects we want to grab the productions from
-
-    let productionCompaniesObjs = movie.production_companies;
-    let productionImgElement = document.getElementById('productionMovieSection');    
-    productionImgElement.innerHTML = '';
-
-    for (const productionCompanyObj of productionCompaniesObjs){
-
-        let productionLogo = productionCompanyObj.logo_path;
-        let productionCompanyName = productionCompanyObj.name;
-
-        productionImgElement.innerHTML += `<div class="col"> <img src="https://image.tmdb.org/t/p/w500${productionLogo}" alt="${productionCompanyName}" /> </div>`;
-
+        // get the Genre
+        movie.genres.forEach(genre => 
+            {
+                // store in memory
+                let badge = document.createElement('span');
+                badge.classList.add('badge', 'text-bg-primary');
+                badge.textContent = genre.name;
+                // alter in html
+                movieGenres.appendChild(badge);
+            }
+        );        
+        
     }
+
+    // pop modal
+    const modal = bootstrap.Modal.getOrCreateInstance('#movieModal');
+    modal.show();
 
 }
 
+
+
+
+
 //  #endregion                                   **************** Make dynamic MODAL that will display individual movie details  *******************
+
+
+// Add to favorites
+async function addFavoriteMovie(button){
+    // get the movie to add to favorites.
+    // get the movie ID
+    const movieId = button.getAttribute('data-movieId');
+    let movies = getFavoriteMovies();
+
+    let duplicateMovie = movies.find(movie => movie.id == movieId);
+
+    // call getMovieDetails
+    
+    if (duplicateMovie == undefined){
+        // get from TMDB
+        const favoriteMovie = await getMovieDetail(movieId);
+        // convert the movie to a string/json
+        if(favoriteMovie != undefined){
+            movies.push(favoriteMovie);
+            saveFavoriteMovies(movies);
+        }
+
+    }
+
+
+    // let the user know we did it
+
+    // NOTE: What if they press the button more than once
+}
+
+function getFavoriteMovies(){
+    let movieJSON = localStorage.getItem('ad-favorite-movies');
+    let favoriteMovies = [];
+
+    if (movieJSON == null){
+        localStorage.setItem('ad-favorite-movies', '[]');
+    }else{
+        favoriteMovies = JSON.parse(movieJSON);
+    }
+
+    return favoriteMovies;
+}
+
+function saveFavoriteMovies(favoriteMovies){
+    let moviesAsString = JSON.stringify(favoriteMovies);
+    localStorage.setItem('ad-favorite-movies', moviesAsString);
+}
+
