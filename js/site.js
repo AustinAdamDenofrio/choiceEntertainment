@@ -3,7 +3,7 @@
 
 const API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjNjFkZTcwZjE2Y2ZmYjFmNDBhNDgzYTJhZDI5NTgwMCIsInN1YiI6IjY2MTk4MDYwMTIxOTdlMDE2NGJiYjU1NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.n0SrW4YbNjv9FK3kd14-xiKD_qoNqirRWsPKXDEQoMg'
 
-//                                                      **************** Get a list of movies to populate page  *******************
+// #region                                                     ****************  Get a list of movies to populate page  *******************
 //Return a list of an array of movies objects or empty array.
 async function getPopularMovies() {
 
@@ -77,11 +77,11 @@ function displayMovies(movies){
 
     }
 }
+// #endregion                                                     ****************  Get a list of movies to populate page  *******************
 
 
 
-
-//                                           **************** Make dynamic MODAL that will display individual movie details  *******************
+//  #region                                         **************** Make dynamic MODAL that will display individual movie details  *******************
 // Movie Details
 // Step1: When the user clicks the more info button show the modal
 // Step2: Call API. Make sure the data is coming back aka in the network tab
@@ -99,9 +99,6 @@ async function getMovieDetail(movieId){
 
     const movieDetailUrl = `https://api.themoviedb.org/3/movie/${movieId}`;
 
-    // let moviesObjectArray;
-
-    // alert(`the movie id is ${movieId}`)
 
     try{
         // call the API
@@ -147,7 +144,7 @@ function displayMovieDetails(movie){
     movieImgElement.setAttribute('src', `https://image.tmdb.org/t/p/w500${movie.poster_path}`);
 
     // Add Subheader
-    subtitleElement = projectOneModal.querySelector('#titleMovieSection > p');
+    let subtitleElement = projectOneModal.querySelector('#titleMovieSection > p');
     subtitleElement.textContent = movie.tagline;
 
     // Add Synopsis section
@@ -164,11 +161,6 @@ function displayMovieDetails(movie){
     releaseDateElement.innerHTML = `${movie.release_date} <i class="bi bi-calendar"></i>`;
      // Budget
     let budgetElement = projectOneModal.querySelector('#detailedMovieSection div:nth-child(3) p');
-    // console.log(
-    //     new Intl.NumberFormat("en-IN", { maximumSignificantDigits: 3 }).format(
-    //       movie.budget,
-    //     ),
-    //   );
     let formatedBudget = new Intl.NumberFormat( {style: "currency", currency: 'USD', maximumSignificantDigits: 4 }).format(movie.budget,);
     budgetElement.innerHTML = `$${formatedBudget} <i class="bi bi-database-up"></i>`;
     // Runtime 
@@ -180,6 +172,23 @@ function displayMovieDetails(movie){
     runtimeElement.innerHTML = `<span class="small">${parsedHours} Hours</span><span class="small"> ${parsedMinutes} Minutes</span> <i class="bi bi-clock"></i>`;
 
 
+    // Production Companies
 
+    // Path to the object that holds the array of objects we want to grab the productions from
+
+    let productionCompaniesObjs = movie.production_companies;
+    let productionImgElement = document.getElementById('productionMovieSection');    
+    productionImgElement.innerHTML = '';
+
+    for (const productionCompanyObj of productionCompaniesObjs){
+
+        let productionLogo = productionCompanyObj.logo_path;
+        let productionCompanyName = productionCompanyObj.name;
+
+        productionImgElement.innerHTML += `<div class="col"> <img src="https://image.tmdb.org/t/p/w500${productionLogo}" alt="${productionCompanyName}" /> </div>`;
+
+    }
 
 }
+
+//  #endregion                                   **************** Make dynamic MODAL that will display individual movie details  *******************
