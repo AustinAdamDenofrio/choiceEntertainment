@@ -155,9 +155,6 @@ async function showMovieDetails(button){
 
         let movieGenres = document.getElementById('movieGenre');
         movieGenres.innerHTML = '';
-        // <span class="badge text-bg-primary">Action</span>
-        // <span class="badge text-bg-primary">Adventure</span>
-        // <span class="badge text-bg-primary">Science Fiction</span>
 
         // get the Genre
         movie.genres.forEach(genre => 
