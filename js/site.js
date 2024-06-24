@@ -6,7 +6,6 @@ const API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjNjFkZTcwZjE2Y2ZmYjFmNDBhNDgzYT
 // #region                                                     ****************  Get a list of movies to populate page  *******************
 //Return a list of an array of movies objects or empty array.
 async function getPopularMovies() {
-
     try{
         // Step 1: get URL
         const getPopularMoviesUrl = 'https://api.themoviedb.org/3/movie/popular';
@@ -31,8 +30,7 @@ async function getPopularMovies() {
     } catch(error){
         console.log(error)
         return [];
-    }
-    
+    }    
 }
 
 async function displayPopularMovies(){
